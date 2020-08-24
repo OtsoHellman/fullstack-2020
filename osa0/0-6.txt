@@ -1,0 +1,17 @@
+note over selain:
+selain kutsuu formin onsubmit-metodia, 
+joka luo uuden note-objektin. note-objekti
+lisätään notes-taulukkoon, minkä jälkeen
+selain kutsuu redrawNotes-funktiota, joka 
+renderöi muistiinpanot näytölle.
+Tämän jälkeen uusi muistiinpano lähetetään palvelimelle
+end note
+
+selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+
+note over palvelin:
+Palvelin tallentaa uuden muistiinpanon notes-taulukkoon,
+muistiinpanon sisältö saadaan HTTP POSTin payloadina
+end note
+
+palvelin-->selain: {"message":"note created"}
