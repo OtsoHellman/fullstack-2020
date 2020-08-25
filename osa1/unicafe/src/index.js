@@ -9,11 +9,14 @@ const Statistics = ({ good, neutral, bad }) => {
   const getPositive = () => `${100 * good / (good + neutral + bad) || 0} %`
   return <>
     <h1>statistics</h1>
+
+    {good+neutral+bad > 0 ? <>
     <Statistic name={"good"} amount={good} />
     <Statistic name={"neutral"} amount={neutral} />
     <Statistic name={"bad"} amount={bad} />
     <Statistic name={"average"} amount={getAverage()} />
     <Statistic name={"positive"} amount={getPositive()} />
+    </> : <p>No feedback given</p>}
   </>
 }
 
