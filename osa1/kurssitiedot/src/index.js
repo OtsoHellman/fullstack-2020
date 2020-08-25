@@ -10,23 +10,18 @@ const App = () => {
   const part3 = 'State of a component'
   const exercises3 = 14
 
-  const Header = ({ course }) => (
-    <h1>{course}</h1>
-  )
+  const Header = ({ course }) => <h1>{course}</h1>
+
+  const Part = ({ content }) => <p>{content.part} {content.exercise}</p>
 
   const Content = ({ contents }) => (
     <>
-      {contents.map(content =>
-        <p key={content.part}>
-          {content.part} {content.exercise}
-        </p>
-      )}
+      {contents.map(content => <Part key={content.part} content={content} />)}
     </>
   )
 
-  const Total = ({ exercises }) => (
-    <p>Number of exercises {exercises.reduce((a, b) => a + b)}</p>
-  )
+  const Total = ({ exercises }) => <p>Number of exercises {exercises.reduce((a, b) => a + b)}</p>
+
 
   return (
     <div>
