@@ -3,18 +3,19 @@ import ReactDOM from 'react-dom'
 
 const App = () => {
   const course = 'Half Stack application development'
-  const part1 = {
+  const parts = [{
     name: 'Fundamentals of React',
     exercises: 10
-  }
-  const part2 = {
+  },
+  {
     name: 'Using props to pass data',
     exercises: 7
-  }
-  const part3 = {
+  },
+  {
     name: 'State of a component',
     exercises: 14
   }
+  ]
 
   const Header = ({ course }) => <h1>{course}</h1>
 
@@ -26,15 +27,19 @@ const App = () => {
     </>
   )
 
-  const Total = ({ exercises }) => <p>Number of exercises {exercises.reduce((a, b) => a + b)}</p>
+  const Total = ({ parts }) => (
+    <p>Number of exercises {parts
+      .map(part => part.exercises)
+      .reduce((a, b) => a + b)}</p>
+  )
 
 
   return (
     <div>
       <Header course={course} />
-      <Content contents={[part1, part2, part3]}
+      <Content contents={parts}
       />
-      <Total exercises={[part1.exercises, part2.exercises, part3.exercises]} />
+      <Total parts={parts} />
     </div>
   )
 }
