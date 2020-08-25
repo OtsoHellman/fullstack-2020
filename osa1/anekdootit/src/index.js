@@ -10,23 +10,30 @@ const Button = (props) => (
 const App = ({ anecdotes }) => {
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(anecdotes.map(anecdote => 0)) //pls dont judge
-  
+
   const generateAnecdote = () => setSelected([Math.floor(Math.random() * anecdotes.length)])
   const voteSelected = () => {
     const pointsCopy = [...points]
     pointsCopy[selected] += 1
     setPoints(pointsCopy)
   }
+  const getMostVoted = () => points.indexOf(Math.max(...points)) // efficiency not relevant here
 
   return (
     <>
       <div>
+        <h1>Anecdote of the day</h1>
         <p>{anecdotes[selected]} </p>
         <p>has {points[selected]} votes</p>
       </div>
       <div>
       <Button text={"vote"} handleClick={voteSelected} />
         <Button text={"next anecdote"} handleClick={generateAnecdote} />
+      </div>
+      <div>
+      <h1>Anecdote with the most votes</h1>
+        <p>{anecdotes[getMostVoted()]} </p>
+        <p>has {points[getMostVoted()]} votes</p>
       </div>
     </>
   )
