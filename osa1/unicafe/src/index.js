@@ -13,6 +13,9 @@ const App = () => {
   )
   const Statistic = (props) => <p>{props.name} {props.amount}</p>
 
+  const getAverage = () => (good-bad)/(good+neutral+bad) || 0
+  const getPositive = () => `${100*good/(good+neutral+bad) || 0} %`
+
   return (
     <div>
       <h1>give feedback</h1>
@@ -23,6 +26,8 @@ const App = () => {
       <Statistic name={"good"} amount={good} />
       <Statistic name={"neutral"} amount={neutral} />
       <Statistic name={"bad"} amount={bad} />
+      <Statistic name={"average"} amount={getAverage()} />
+      <Statistic name={"positive"} amount={getPositive()} />
     </div>
   )
 }
