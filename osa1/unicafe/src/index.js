@@ -1,7 +1,12 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const StatisticLine = (props) => <p>{props.text} {props.value}</p>
+const StatisticLine = (props) => (
+  <tr>
+    <td>{props.text}</td>
+    <td>{props.value}</td>
+  </tr>
+)
 
 const Statistics = ({ good, neutral, bad }) => {
 
@@ -10,13 +15,17 @@ const Statistics = ({ good, neutral, bad }) => {
   return <>
     <h1>statistics</h1>
 
-    {good+neutral+bad > 0 ? <>
-    <StatisticLine text={"good"} value={good} />
-    <StatisticLine text={"neutral"} value={neutral} />
-    <StatisticLine text={"bad"} value={bad} />
-    <StatisticLine text={"average"} value={getAverage()} />
-    <StatisticLine text={"positive"} value={getPositive()} />
-    </> : <p>No feedback given</p>}
+    {good + neutral + bad > 0 ? (
+      <table>
+        <tbody>
+          <StatisticLine text={"good"} value={good} />
+          <StatisticLine text={"neutral"} value={neutral} />
+          <StatisticLine text={"bad"} value={bad} />
+          <StatisticLine text={"average"} value={getAverage()} />
+          <StatisticLine text={"positive"} value={getPositive()} />
+        </tbody>
+      </table>
+    ) : <p>No feedback given</p>}
   </>
 }
 
