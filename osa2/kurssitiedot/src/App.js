@@ -16,33 +16,47 @@ const Total = ({ parts }) => (
         .reduce((a, b) => a + b)}</p>
 )
 
-const App = () => {
-    const course = {
-        name: 'Half Stack application development',
-        parts: [
-            {
-                name: 'Fundamentals of React',
-                exercises: 10
-            },
-            {
-                name: 'Using props to pass data',
-                exercises: 7
-            },
-            {
-                name: 'State of a component',
-                exercises: 14
-            }
-        ]
-    }
-
+const Course = ({course}) => {
     return (
         <div>
             <Header course={course.name} />
             <Content contents={course.parts}
             />
-            <Total parts={course.parts} />
+            {
+                //<Total parts={course.parts} />
+            }
         </div>
     )
 }
+
+const App = () => {
+    const course = {
+      name: 'Half Stack application development',
+      id: 1,
+      parts: [
+        {
+          name: 'Fundamentals of React',
+          exercises: 10,
+          id: 1
+        },
+        {
+          name: 'Using props to pass data',
+          exercises: 7,
+          id: 2
+        },
+        {
+          name: 'State of a component',
+          exercises: 14,
+          id: 3
+        }
+      ]
+    }
+  
+    return (
+      <div>
+        <Course course={course} />
+      </div>
+    )
+  }
 
 export default App
