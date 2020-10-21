@@ -21,8 +21,17 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    if (persons.map(obj => obj.name).includes(newName)) {
-      window.alert(`${newName} is already added in the phonebook`)
+    if (persons.map(person => person.name).includes(newName)) {
+      if (window.confirm(`${newName} is already added in the phonebook, replace the old number with the new one?`)) {
+        const personObject = persons.find(person => person.name === newName)
+        personService
+          .putPerson({
+            ...personObject,
+            number: newNumber
+          })
+          .then(data => setPersons(persons.map(person => person.id === data.id ? data : person)))
+      }
+
     } else {
       personService
         .postPerson({
@@ -53,7 +62,7 @@ const App = () => {
       </div>
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} handlePersonChange={handlePersonChange} handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-      <PersonList persons={persons} filterValue={filterValue} deletePerson={(id) => (deletePerson(id))}/>
+      <PersonList persons={persons} filterValue={filterValue} deletePerson={(id) => (deletePerson(id))} />
     </div>
   )
 
