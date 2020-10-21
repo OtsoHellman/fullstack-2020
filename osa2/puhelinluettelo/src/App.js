@@ -37,6 +37,12 @@ const App = () => {
     }
   }
 
+  const deletePerson = (id) => {
+    personService
+      .deletePerson(id)
+      .then(setPersons(persons.filter(person => person.id !== id)))
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -47,7 +53,7 @@ const App = () => {
       </div>
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} handlePersonChange={handlePersonChange} handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-      <PersonList persons={persons} filterValue={filterValue} />
+      <PersonList persons={persons} filterValue={filterValue} deletePerson={(id) => (deletePerson(id))}/>
     </div>
   )
 

@@ -1,4 +1,6 @@
 import React from 'react'
 
-export default ({ name, number }) => <p>{name} {number}</p>
-
+export default ({ name, number, deletePerson }) => <li>
+    {name} {number}
+    <button onClick={() => window.confirm(`Delete ${name}?`) && deletePerson()}>delete</button>
+</li >
