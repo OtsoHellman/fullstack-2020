@@ -9,11 +9,11 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
 
-  useEffect(()=> {
+  useEffect(() => {
     axios
       .get('http://localhost:3001/persons')
       .then(response => setPersons(response.data))
-  },[])
+  }, [])
 
   const handleFilterChange = (event) => setFilterValue(event.target.value)
   const handlePersonChange = (event) => setNewName(event.target.value)
@@ -24,12 +24,16 @@ const App = () => {
     if (persons.map(obj => obj.name).includes(newName)) {
       window.alert(`${newName} is already added in the phonebook`)
     } else {
-      setPersons(persons.concat({
-        name: newName,
-        number: newNumber
-      }))
-      setNewName('')
-      setNewNumber('')
+      axios
+        .post('http://localhost:3001/persons', {
+          name: newName,
+          number: newNumber
+        })
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
