@@ -1,3 +1,4 @@
+import _ from 'lodash'
 const dummy = (blogs) => 1
 
 const totalLikes = (blogs) => blogs
@@ -8,4 +9,20 @@ const favoriteBlog = (blogs) => blogs.length > 0
     ? blogs.reduce((bestBlog, blog) => bestBlog.likes > blog.likes ? bestBlog : blog)
     : null
 
-export default { dummy, totalLikes, favoriteBlog }
+const mostBlogs = (blogs) => {
+    if (blogs.length < 1) {
+        return null
+    }
+    const blogsAuthored = _.groupBy(blogs, blog => blog.author)
+
+    return Object.keys(blogsAuthored)
+        .map(author => ({
+            author,
+            blogs: blogsAuthored[author].length
+        }))
+        .reduce((bestAuthor, author) => bestAuthor.blogs > author.blogs
+            ? bestAuthor
+            : author)
+}
+
+export default { dummy, totalLikes, favoriteBlog, mostBlogs }
