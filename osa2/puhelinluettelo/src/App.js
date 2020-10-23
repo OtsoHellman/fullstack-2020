@@ -60,6 +60,13 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
+        .catch(err => {
+          console.log(err)
+          setNotificationMessage({
+            message: err.response.data.err, isError: true
+          })
+          setTimeout(() => setNotificationMessage({ message: null, isError: null }), 2000)
+        })
     }
   }
 
