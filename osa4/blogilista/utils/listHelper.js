@@ -25,4 +25,22 @@ const mostBlogs = (blogs) => {
             : author)
 }
 
-export default { dummy, totalLikes, favoriteBlog, mostBlogs }
+const mostLikes = (blogs) => {
+    if (blogs.length < 1) {
+        return null
+    }
+    const blogsAuthored = _.groupBy(blogs, blog => blog.author)
+
+    return Object.keys(blogsAuthored)
+        .map(author => ({
+            author,
+            likes: blogsAuthored[author]
+                .map(blog => blog.likes)
+                .reduce((a,b) => a+b)
+        }))
+        .reduce((bestAuthor, author) => bestAuthor.likes > author.likes
+            ? bestAuthor
+            : author)
+}
+
+export default { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes }
