@@ -32,6 +32,12 @@ test('correct number of blogs are returned', async () => {
 
 })
 
+test('blogs have id field', async () => {
+    const response = await api.get('/api/blogs')
+    response.body.forEach(blog => expect(blog.id).toBeDefined())
+})
+
+
 afterAll(() => {
     mongoose.connection.close()
 })
