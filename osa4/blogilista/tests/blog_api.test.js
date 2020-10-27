@@ -86,6 +86,17 @@ describe('blogs', () => {
             .expect(400)
     })
 
+    test('deletes blogs successfully', async () => {
+        const responseAtStart = await api.get('/api/blogs')
+        const blogToBeDeletedId = responseAtStart.body[0].id
+
+        await api
+            .delete(`/api/blogs/${blogToBeDeletedId}`)
+            .expect(204)
+
+        const response = await api.get('/api/blogs')
+        expect(response.body).toHaveLength(blogs.length - 1)
+    })
 })
 
 
