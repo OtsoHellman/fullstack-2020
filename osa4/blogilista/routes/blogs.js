@@ -11,7 +11,7 @@ blogsRouter.get('/', (request, response) => {
 })
 
 blogsRouter.post('/', (request, response) => {
-    
+
     if (!request.body || !request.body.title || !request.body.url) {
         return response.status(400).send('title or url missing')
     }
@@ -27,10 +27,17 @@ blogsRouter.post('/', (request, response) => {
         })
 })
 
+blogsRouter.put('/:id', async (request, response) => {
+    if (!request.body) {
+        return response.status(400).end()
+    }
+    const databaseResponse = await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true })
+    response.json(databaseResponse.toJSON())
+})
 
 blogsRouter.delete('/:id', async (request, response) => {
     await Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()
-  })
+})
 
 export default blogsRouter

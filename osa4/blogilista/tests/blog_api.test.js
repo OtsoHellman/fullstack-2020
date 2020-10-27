@@ -97,6 +97,21 @@ describe('blogs', () => {
         const response = await api.get('/api/blogs')
         expect(response.body).toHaveLength(blogs.length - 1)
     })
+
+    test('updates blogs successfully', async () => {
+        const responseAtStart = await api.get('/api/blogs')
+        const blogToBeUpdatedId = responseAtStart.body[0].id
+        const title = "How to make testing interesting"
+        const likes = -9001
+
+        const response = await api
+            .put(`/api/blogs/${blogToBeUpdatedId}`)
+            .send({ title, likes })
+            .expect(200)
+
+        expect(response.body.title).toEqual(title)
+        expect(response.body.likes).toEqual(likes)
+    })
 })
 
 
