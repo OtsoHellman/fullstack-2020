@@ -62,6 +62,30 @@ describe('blogs', () => {
         const response = await api.get('/api/blogs')
         expect(response.body.find(blog => blog.title === "Type wars").likes).toEqual(0)
     })
+
+    test('reject new blogs without name and url', async () => {
+        const { author, title, url } = newBlog
+        const noTitleBlog = {
+            author,
+            url
+        }
+
+        const noUrlBlog = {
+            author,
+            title
+        }
+
+        await api
+            .post('/api/blogs')
+            .send(noTitleBlog)
+            .expect(400)
+
+        await api
+            .post('/api/blogs')
+            .send(noUrlBlog)
+            .expect(400)
+    })
+
 })
 
 
