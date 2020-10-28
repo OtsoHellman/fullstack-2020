@@ -13,12 +13,10 @@ blogsRouter.get('/', (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response) => {
-
     try {
-        const authorization = request.get('authorization')
-        const token = authorization && authorization.toLowerCase().startsWith('bearer ') && authorization.substring(7)
-        const decodedToken = jwt.verify(token, process.env.SECRET)
-        if (!token || !decodedToken) {
+        // use var as a band-aid to make decodedToken visible outside try block because const doesnt seem to work
+        var decodedToken = jwt.verify(request.token, process.env.SECRET)
+        if (!request.token || !decodedToken) {
             return response.status(401).json({ error: "token missing or invalid" })
         }
     } catch (error) {
