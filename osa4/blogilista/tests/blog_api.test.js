@@ -22,8 +22,6 @@ beforeEach(async () => {
 
 
 describe('blogs', () => {
-
-
     test('are returned as json', async () => {
         await api
             .get('/api/blogs')

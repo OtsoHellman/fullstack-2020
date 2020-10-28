@@ -16,17 +16,24 @@ usersRouter.post('/', async (req, res) => {
 
     const { name, username, password } = req.body
 
+    if (password.length < 3) {
+        return res.status(400).send('password too short')
+    }
+
     const saltRounds = 10
     const passwordHash = await bcrypt.hash(password, saltRounds)
 
-    const newUser = await new User({
-        name,
-        username,
-        passwordHash
-    }).save()
+    try {
+        const newUser = await new User({
+            name,
+            username,
+            passwordHash
+        }).save()
 
-    res.json(newUser)
+        res.json(newUser)
+    } catch(err) {
+        res.json(err)
+    }
 })
-
 
 export default usersRouter
