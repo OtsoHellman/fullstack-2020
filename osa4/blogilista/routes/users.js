@@ -29,10 +29,12 @@ usersRouter.post('/', async (req, res) => {
             username,
             passwordHash
         }).save()
-
-        res.json(newUser)
+        console.log(newUser)
+        res.status(201).json(newUser)
     } catch(err) {
-        res.json(err)
+        if (err.name === 'ValidationError') {
+            res.status(400).send({err})
+        }
     }
 })
 

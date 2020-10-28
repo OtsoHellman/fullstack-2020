@@ -2,6 +2,9 @@ import mongoose from 'mongoose'
 import supertest from 'supertest'
 import app from '../app.js'
 import Blog from '../models/blog.js'
+import User from '../models/user.js'
+
+// kram multiple api tests into one file because for some reason multiple test files are not working. something something supertest?
 
 const api = supertest(app)
 
@@ -15,13 +18,13 @@ const blogs = [
 
 const newBlog = { title: "Type wars", author: "Robert C. Martin", url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html" }
 
-beforeEach(async () => {
-    await Blog.deleteMany({})
-    await Blog.insertMany(blogs)
-})
-
 
 describe('blogs', () => {
+    beforeEach(async () => {
+        await Blog.deleteMany({})
+        await Blog.insertMany(blogs)
+    })
+
     test('are returned as json', async () => {
         await api
             .get('/api/blogs')
@@ -112,6 +115,103 @@ describe('blogs', () => {
     })
 })
 
+const users = [
+    {
+        username: "testijäbä 1",
+        name: "Jukka Välimaa",
+        password: "salasana"
+    },
+    {
+        username: "testijäbä 2",
+        name: "Jukka Alamaa",
+        password: "salasana1123"
+    },
+    {
+        username: "testijäbä 3",
+        name: "Jukka Alatalo",
+        password: "Sala_sana"
+    }
+]
+
+const newUser = {
+    "username": "root",
+    "password": "root",
+    "name": "Jukka Jalonen"
+}
+
+describe('users', () => {
+    beforeEach(async () => {
+        await User.deleteMany({})
+        await User.insertMany(users)
+    })
+
+    test('are returned as json', async () => {
+        await api
+            .get('/api/users')
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+    })
+
+    test('can be added to database', async () => {
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+
+        const response = await api.get('/api/users')
+        expect(response.body).toHaveLength(users.length + 1)
+    })
+
+    describe('rejects new users with', () => {
+        test('too short password', async () => {
+            const shortPasswordUser = {
+                username: "aasi",
+                name: "Birgitta Ylämetsä",
+                password: "ui"
+            }
+            await api
+                .post('/api/users')
+                .send(shortPasswordUser)
+                .expect(400)
+
+            const response = await api.get('/api/users')
+            expect(response.body).toHaveLength(users.length)
+        })
+        test('too short username', async () => {
+            const shortUsernameUser = {
+                username: "a",
+                name: "Birgitta Ylämaasto",
+                password: "uliuli"
+            }
+
+            await api
+                .post('/api/users')
+                .send(shortUsernameUser)
+                .expect(400)
+
+            const response = await api.get('/api/users')
+            expect(response.body).toHaveLength(users.length)
+        })
+        test('existing name', async () => {
+            const existingName = {
+                username: users[0].username,
+                name: "Birgitta Ylämetsä",
+                password: "rootroot"
+            }
+
+            await api
+                .post('/api/users')
+                .send(existingName)
+                .expect(400)
+
+
+            const response = await api.get('/api/users')
+            expect(response.body).toHaveLength(users.length)
+        })
+    })
+})
 
 afterAll(() => {
     mongoose.connection.close()
