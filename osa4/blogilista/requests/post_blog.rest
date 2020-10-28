@@ -1,8 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer asdd
 
 {
-    "title": "OTsake",
+    "title": "Otsake",
     "author": "JUkka mäkimäki",
     "url": "viinaarannasta.ee",
     "likes": 5

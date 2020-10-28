@@ -1,4 +1,5 @@
 import express from 'express'
+import jwt from 'jsonwebtoken'
 import Blog from '../models/blog.js'
 import User from '../models/user.js'
 const blogsRouter = express.Router()
@@ -13,19 +14,30 @@ blogsRouter.get('/', (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
 
+    try {
+        const authorization = request.get('authorization')
+        const token = authorization && authorization.toLowerCase().startsWith('bearer ') && authorization.substring(7)
+        const decodedToken = jwt.verify(token, process.env.SECRET)
+        if (!token || !decodedToken) {
+            return response.status(401).json({ error: "token missing or invalid" })
+        }
+    } catch (error) {
+        return response.status(401).json({ error: "invalid token" })
+    }
+
     if (!request.body || !request.body.title || !request.body.url) {
         return response.status(400).send('title or url missing')
     }
 
-    const firstUserInDatabase = await User.findOne({})
+    const user = await User.findById(decodedToken.id)
     const blog = new Blog({
         ...request.body,
         likes: request.body.likes || 0,
-        user: firstUserInDatabase.id
+        user: user.id
     })
     const databaseResponse = await blog.save()
-    firstUserInDatabase.blogs = firstUserInDatabase.blogs.concat(databaseResponse._id)
-    await firstUserInDatabase.save()
+    user.blogs = user.blogs.concat(databaseResponse._id)
+    await user.save()
     return response.status(201).json(databaseResponse)
 })
 
