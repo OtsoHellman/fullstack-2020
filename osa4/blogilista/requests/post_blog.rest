@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "Title": "Testiotsikko",
+    "title": "OTsake",
     "author": "JUkka mäkimäki",
     "url": "viinaarannasta.ee",
-    "likes": 3
+    "likes": 5
 }

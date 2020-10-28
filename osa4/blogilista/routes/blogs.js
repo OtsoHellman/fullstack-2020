@@ -1,30 +1,32 @@
 import express from 'express'
 import Blog from '../models/blog.js'
+import User from '../models/user.js'
 const blogsRouter = express.Router()
 
 blogsRouter.get('/', (request, response) => {
     Blog
-        .find({})
+        .find({}).populate('user', { username: 1, name: 1 })
         .then(blogs => {
             response.json(blogs)
         })
 })
 
-blogsRouter.post('/', (request, response) => {
+blogsRouter.post('/', async (request, response) => {
 
     if (!request.body || !request.body.title || !request.body.url) {
         return response.status(400).send('title or url missing')
     }
 
+    const firstUserInDatabase = await User.findOne({})
     const blog = new Blog({
         ...request.body,
-        likes: request.body.likes || 0
+        likes: request.body.likes || 0,
+        user: firstUserInDatabase.id
     })
-    blog
-        .save()
-        .then(result => {
-            response.status(201).json(result)
-        })
+    const databaseResponse = await blog.save()
+    firstUserInDatabase.blogs = firstUserInDatabase.blogs.concat(databaseResponse._id)
+    await firstUserInDatabase.save()
+    return response.status(201).json(databaseResponse)
 })
 
 blogsRouter.put('/:id', async (request, response) => {
