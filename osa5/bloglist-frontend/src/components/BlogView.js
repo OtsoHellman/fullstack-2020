@@ -1,14 +1,23 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import BlogList from './BlogList'
 import BlogCreateForm from './BlogCreateForm'
 import Togglable from './Togglable'
 
-export default ({ blogs, name, handleLogout, postBlog }) => <div>
-    <h2>blogs</h2>
-    {name}
-    <button onClick={handleLogout}>log out</button>
-    <Togglable buttonLabel="add blog">
-        <BlogCreateForm postBlog={postBlog} />
-    </Togglable>
-    <BlogList blogs={blogs} />
-</div>
+export default ({ blogs, name, handleLogout, postBlog }) => {
+    const blogCreateFormRef = useRef()
+    
+    const postBlogHideToggle = (blog) => {
+        blogCreateFormRef.current.toggleVisibility()
+        postBlog(blog)
+    } 
+
+    return <div>
+        <h2>blogs</h2>
+        {name}
+        <button onClick={handleLogout}>log out</button>
+        <Togglable buttonLabel="add blog" ref={blogCreateFormRef}>
+            <BlogCreateForm postBlog={postBlogHideToggle} />
+        </Togglable>
+        <BlogList blogs={blogs} />
+    </div>
+}
