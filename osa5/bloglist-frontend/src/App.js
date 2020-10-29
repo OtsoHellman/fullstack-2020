@@ -8,27 +8,40 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
-  const handleLogin = async (username, password) => {
-    try {
-      const user = await loginService.login({
-        username,
-        password
-      })
-      console.log(user)
-      setUser(user)
-    } catch (error) {
-      console.log(error)
-      window.alert('wrong credentials')
-    }
-  }
-
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
     )
   }, [])
 
-  return user ? <BlogList blogs={blogs} /> : <LoginForm handleLogin={handleLogin} />
+  useEffect(() => {
+    const loggedUser = window.localStorage.getItem('loggedUser')
+    if (loggedUser) {
+      const user = JSON.parse(loggedUser)
+      setUser(user)
+    }
+  }, [])
+
+  const handleLogin = async (username, password) => {
+    try {
+      const loggedUser = await loginService.login({
+        username,
+        password
+      })
+      setUser(loggedUser)
+      window.localStorage.setItem('loggedUser', JSON.stringify(loggedUser))
+    } catch (error) {
+      console.log(error)
+      window.alert('wrong credentials')
+    }
+  }
+
+  const handleLogout = async () => {
+    window.localStorage.removeItem('loggedUser')
+    setUser(null)
+  }
+
+  return user ? <BlogList blogs={blogs} name ={user && user.name} handleLogout={handleLogout} /> : <LoginForm handleLogin={handleLogin} />
 }
 
 export default App
