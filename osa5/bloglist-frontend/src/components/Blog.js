@@ -17,7 +17,7 @@ const Blog = ({ blog, postLike, removeBlog, user }) => {
     <p style={pStyle}>
       {blog.title} by {blog.author}
       <button onClick={() => setIsExpanded(!isExpanded)}>
-        {isExpanded ? "hide" : "view"}
+        {isExpanded ? 'hide' : 'view'}
       </button>
     </p>
     {isExpanded && <div>

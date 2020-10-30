@@ -36,7 +36,7 @@ const App = () => {
       window.localStorage.setItem('loggedUser', JSON.stringify(loggedUser))
     } catch (error) {
       console.log(error)
-      setNotificationMessage(({ message: "wrong username or password", isError: true }))
+      setNotificationMessage(({ message: 'wrong username or password', isError: true }))
       setTimeout(() => {
         setNotificationMessage({ message: null, isError: null })
       }, 2000)
