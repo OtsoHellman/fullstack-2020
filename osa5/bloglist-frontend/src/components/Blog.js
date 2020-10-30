@@ -10,7 +10,7 @@ const blogStyle = {
 
 const pStyle = { margin: 0 }
 
-const Blog = ({ blog, postLike }) => {
+const Blog = ({ blog, postLike, removeBlog, user }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
   return <div style={blogStyle}>
@@ -29,6 +29,7 @@ const Blog = ({ blog, postLike }) => {
         </button>
       </p>
       <p style={pStyle}>{blog.user.name}</p>
+      {blog.user.id === user.id && <button onClick={() => window.confirm(`Remove blog ${blog.title} by ${blog.author}?`) && removeBlog(blog)}>remove</button>}
     </div>}
   </div>
 }

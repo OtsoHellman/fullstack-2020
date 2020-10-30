@@ -61,6 +61,11 @@ const App = () => {
     setBlogs(blogs.concat(response))
   }
 
+  const removeBlog = async (blog) => {
+    const response = await blogService.removeBlog(blog)
+    response && setBlogs(blogs.filter(asd => asd.id !== blog.id))
+  }
+
   const postLike = async (blog) => {
     const response = await blogService.postLike(blog)
     setBlogs(blogs.map(blog => blog.id === response.id ? response : blog))
@@ -71,10 +76,11 @@ const App = () => {
     {user
       ? <BlogView
         blogs={blogs}
-        name={user && user.name}
+        user={user}
         handleLogout={handleLogout}
         postBlog={postBlog}
-        postLike={postLike} />
+        postLike={postLike}
+        removeBlog={removeBlog} />
       : <LoginForm handleLogin={handleLogin} />}
   </>
 }
