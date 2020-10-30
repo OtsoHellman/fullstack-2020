@@ -3,7 +3,7 @@ import BlogList from './BlogList'
 import BlogCreateForm from './BlogCreateForm'
 import Togglable from './Togglable'
 
-export default ({ blogs, name, handleLogout, postBlog }) => {
+export default ({ blogs, name, handleLogout, postBlog, postLike }) => {
     const blogCreateFormRef = useRef()
     
     const postBlogHideToggle = (blog) => {
@@ -18,6 +18,6 @@ export default ({ blogs, name, handleLogout, postBlog }) => {
         <Togglable buttonLabel="add blog" ref={blogCreateFormRef}>
             <BlogCreateForm postBlog={postBlogHideToggle} />
         </Togglable>
-        <BlogList blogs={blogs} />
+        <BlogList blogs={blogs} postLike={postLike} />
     </div>
 }

@@ -43,7 +43,7 @@ blogsRouter.put('/:id', async (request, response) => {
     if (!request.body) {
         return response.status(400).end()
     }
-    const databaseResponse = await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true })
+    const databaseResponse = await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true }).populate('user', { username: 1, name: 1 })
     response.json(databaseResponse.toJSON())
 })
 

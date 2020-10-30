@@ -61,9 +61,21 @@ const App = () => {
     setBlogs(blogs.concat(response))
   }
 
+  const postLike = async (blog) => {
+    const response = await blogService.postLike(blog)
+    setBlogs(blogs.map(blog => blog.id === response.id ? response : blog))
+  }
+
   return <>
     {notificationMessage.message && <Notification message={notificationMessage.message} isError={notificationMessage.isError} />}
-    {user ? <BlogView blogs={blogs} name={user && user.name} handleLogout={handleLogout} postBlog={postBlog} /> : <LoginForm handleLogin={handleLogin} />}
+    {user
+      ? <BlogView
+        blogs={blogs}
+        name={user && user.name}
+        handleLogout={handleLogout}
+        postBlog={postBlog}
+        postLike={postLike} />
+      : <LoginForm handleLogin={handleLogin} />}
   </>
 }
 
