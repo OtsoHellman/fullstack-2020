@@ -1,5 +1,5 @@
-describe('Blog app', function() {
-  beforeEach(function() {
+describe('Blog app', function () {
+  beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/test/reset')
     cy.request('POST', 'http://localhost:3003/api/users',
       {
@@ -10,14 +10,14 @@ describe('Blog app', function() {
     cy.visit('http://localhost:3000')
   })
 
-  it('Login form is shown', function() {
+  it('Login form is shown', function () {
     cy.get('#loginForm')
       .should('contain', 'username')
       .and('contain', 'password')
   })
 
-  describe('Login',function() {
-    it('succeeds with correct credentials', function() {
+  describe('Login', function () {
+    it('succeeds with correct credentials', function () {
       cy.get('#usernameInput').type('root')
       cy.get('#passwordInput').type('root')
       cy.get('#submitLogin').click()
@@ -26,7 +26,7 @@ describe('Blog app', function() {
       cy.contains('add blog')
     })
 
-    it('fails with wrong credentials', function() {
+    it('fails with wrong credentials', function () {
       cy.get('#usernameInput').type('root')
       cy.get('#passwordInput').type('not root')
       cy.get('#submitLogin').click()
@@ -36,6 +36,28 @@ describe('Blog app', function() {
       cy.get('#loginForm')
         .should('contain', 'username')
         .and('contain', 'password')
+    })
+  })
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.request('POST', 'http://localhost:3003/api/login',
+        {
+          'username': 'root',
+          'password': 'root'
+        })
+        .then(({ body }) => {
+          localStorage.setItem('loggedUser', JSON.stringify(body))
+          cy.visit('http://localhost:3000')})
+    })
+    it('A blog can be created', function () {
+      cy.contains('add blog').click()
+      cy.get('#titleInput').type('Testblog')
+      cy.get('#authorInput').type('Testjaebae')
+      cy.get('#urlInput').type('viinaarannasta.ee')
+      cy.get('#submitBlog').click()
+      cy.contains('Testblog').should('exist')
+      cy.contains('Testjaebae').should('exist')
+      cy.contains('viinaarannasta.ee').should('not.exist')
     })
   })
 })
