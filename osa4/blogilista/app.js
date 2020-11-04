@@ -6,6 +6,7 @@ import middleware from './utils/middleware.js'
 import blogsRouter from './routes/blogs.js'
 import usersRouter from './routes/users.js'
 import loginRouter from './routes/login.js'
+import testRouter from './routes/test.js'
 import config from './utils/config.js'
 const app = express()
 
@@ -18,5 +19,9 @@ app.use(middleware.tokenExtractor)
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+
+if (process.env.NODE_ENV === 'test') {
+    app.use('/api/test', testRouter)
+}
 
 export default app

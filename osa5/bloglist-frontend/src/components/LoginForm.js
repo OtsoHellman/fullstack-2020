@@ -11,7 +11,7 @@ const LoginForm = ({ handleLogin }) => {
     setPassword('')
   }
 
-  return <form onSubmit={triggerLogin}>
+  return <form id="loginForm" onSubmit={triggerLogin}>
     <div>
             username
       <input
