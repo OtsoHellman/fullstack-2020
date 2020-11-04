@@ -37,3 +37,18 @@ test('shows likes and url when "view" is clicked', () => {
   expect(component.container).toHaveTextContent(blog.likes)
   expect(component.container).toHaveTextContent(blog.url)
 })
+
+test('postLike fires when like is pressed', () => {
+  const postLikeMockHander = jest.fn()
+
+  const component = render(
+    <Blog blog={blog} user={user} postLike={postLikeMockHander} />
+  )
+  const viewButton = component.getByText('view')
+  fireEvent.click(viewButton)
+  const likeButton = component.getByText('like')
+  fireEvent.click(likeButton)
+  fireEvent.click(likeButton)
+
+  expect(postLikeMockHander.mock.calls).toHaveLength(2)
+})
