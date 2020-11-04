@@ -59,5 +59,26 @@ describe('Blog app', function () {
       cy.contains('Testjaebae').should('exist')
       cy.contains('viinaarannasta.ee').should('not.exist')
     })
+    describe('After adding a blog', function () {
+      beforeEach(function () {
+        cy.contains('add blog').click()
+        cy.get('#titleInput').type('Testblog')
+        cy.get('#authorInput').type('Testjaebae')
+        cy.get('#urlInput').type('viinaarannasta.ee')
+        cy.get('#submitBlog').click()
+      })
+      it('A blog can be liked', function () {
+        cy
+          .get('p')
+          .contains('Testblog')
+          .contains('view')
+          .click()
+        cy.contains('likes 0').should('exist')
+        cy.contains('likes 1').should('not.exist')
+        cy.contains('Testblog').parent().find('button').contains('like').click()
+        cy.contains('likes 0').should('not.exist')
+        cy.contains('likes 1').should('exist')
+      })
+    })
   })
 })
