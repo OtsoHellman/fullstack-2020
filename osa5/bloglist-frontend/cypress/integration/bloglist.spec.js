@@ -100,6 +100,53 @@ describe('Blog app', function () {
         cy.contains('Testblog').should('not.exist')
         cy.contains('Testjaebae').should('not.exist')
       })
+      it('blogs are sorted according to likes', function () {
+        function likeBlog(blogName, n) {
+          cy
+            .get('p')
+            .contains(blogName + ' by')
+            .contains('view')
+            .click()
+          for (let i =0; i < n; i++) {
+            cy
+              .get('p')
+              .contains(blogName + ' by')
+              .parent()
+              .find('button')
+              .contains('like')
+              .click()
+          }
+        }
+
+        cy.contains('add blog').click()
+        cy.get('#titleInput').type('Testblog1')
+        cy.get('#authorInput').type('Testjaebae')
+        cy.get('#urlInput').type('viinaarannasta.club')
+        cy.get('#submitBlog').click()
+        cy.contains('add blog').click()
+        cy.get('#titleInput').type('Testblog2')
+        cy.get('#authorInput').type('Testjaebae2')
+        cy.get('#urlInput').type('viinaarannasta.ee')
+        cy.get('#submitBlog').click()
+        cy.contains('add blog').click()
+        cy.get('#titleInput').type('Testblog3')
+        cy.get('#authorInput').type('Testjaebae2')
+        cy.get('#urlInput').type('viinaarannasta.us')
+        cy.get('#submitBlog').click()
+        cy.wait(1000)
+
+        likeBlog('Testblog3', 5)
+        likeBlog('Testblog1', 3)
+        likeBlog('Testblog2', 7)
+        likeBlog('Testblog', 2)
+
+        let agg = []
+        cy.get('p').each(asd => {
+          asd.text().slice(0,8) === 'Testblog' && agg.push(asd.text().split(' ')[0])
+        }).then(asjdfoasdpof => {
+          expect(agg.toString()).to.equal(['Testblog2', 'Testblog3', 'Testblog1', 'Testblog'].toString())
+        })
+      })
     })
   })
 })
