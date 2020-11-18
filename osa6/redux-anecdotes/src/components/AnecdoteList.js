@@ -19,7 +19,7 @@ const AnecdoteList = () => {
   }
 
   return <div>
-      {anecdotes
+      {anecdotes.length > 0 && anecdotes
         .filter(anecdote => anecdote.content.toLowerCase().includes(filter))
         .map(anecdote =>
         <div key={anecdote.id}>
