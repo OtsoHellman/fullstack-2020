@@ -19,6 +19,11 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
+const sortedAnecdotes = anecdotes => {
+  // there probably should be a way for automatically applying this after an action?
+  return [...anecdotes].sort((a,b) => b.votes - a.votes)
+}
+
 const reducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
@@ -30,9 +35,9 @@ const reducer = (state = initialState, action) => {
         ...anecdoteToVote,
         votes: anecdoteToVote.votes + 1
       }
-      return state.map(anecdote => anecdote.id === id ? changedAnecdote : anecdote)
+      return sortedAnecdotes(state.map(anecdote => anecdote.id === id ? changedAnecdote : anecdote))
     case 'CREATE':
-      return [...state, asObject(action.data.content)]
+      return sortedAnecdotes([...state, asObject(action.data.content)])
 
     default:
       return state
