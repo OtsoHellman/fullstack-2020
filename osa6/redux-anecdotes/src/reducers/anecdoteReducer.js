@@ -25,7 +25,7 @@ const reducer = (state = [], action) => {
       }
       return sortedAnecdotes(state.map(anecdote => anecdote.id === action.data.anecdote.id ? changedAnecdote : anecdote))
     case 'CREATE':
-      return sortedAnecdotes([...state, asObject(action.data.content)])
+      return sortedAnecdotes([...state, action.data.content])
 
     case 'INITIALIZE':
       return action.data.anecdotes
@@ -45,11 +45,11 @@ export const voteAnecdote = anecdote => async dispatch => {
 }
 
 export const createAnecdote = content => async dispatch => {
-  await post(content)
+  const anecdote = await post(content)
   dispatch({
     type: 'CREATE',
     data: {
-      content
+      content: anecdote
     }
   })
 }
