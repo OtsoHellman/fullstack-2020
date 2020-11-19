@@ -1,4 +1,4 @@
-import { getAll } from '../services/anecdoteService'
+import { getAll, post } from '../services/anecdoteService'
 
 
 const getId = () => (100000 * Math.random()).toFixed(0)
@@ -43,12 +43,15 @@ export const voteAnecdote = id => ({
   }
 })
 
-export const createAnecdote = content => ({
-  type: 'CREATE',
-  data: {
-    content
-  }
-})
+export const createAnecdote = content => async dispatch => {
+  await post(content)
+  dispatch({
+    type: 'CREATE',
+    data: {
+      content
+    }
+  })
+}
 
 export const initializeAnecdotes = () => (
   async dispatch => {
