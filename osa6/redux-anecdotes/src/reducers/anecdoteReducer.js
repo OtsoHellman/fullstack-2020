@@ -1,3 +1,6 @@
+import { getAll } from '../services/anecdoteService'
+
+
 const getId = () => (100000 * Math.random()).toFixed(0)
 
 export const asObject = (anecdote) => {
@@ -10,7 +13,7 @@ export const asObject = (anecdote) => {
 
 const sortedAnecdotes = anecdotes => {
   // there probably should be a way for automatically applying this after an action?
-  return [...anecdotes].sort((a,b) => b.votes - a.votes)
+  return [...anecdotes].sort((a, b) => b.votes - a.votes)
 }
 
 const reducer = (state = [], action) => {
@@ -37,21 +40,25 @@ export const voteAnecdote = id => ({
   type: 'VOTE',
   data: {
     id
-  } 
+  }
 })
 
 export const createAnecdote = content => ({
   type: 'CREATE',
   data: {
     content
-  } 
+  }
 })
 
-export const initializeAnecdotes = anecdotes => ({
-  type: 'INITIALIZE',
-  data: {
-    anecdotes
-  } 
-})
+export const initializeAnecdotes = () => (
+  async dispatch => {
+    const anecdotes = await getAll()
+    dispatch({
+      type: 'INITIALIZE',
+      data: {
+        anecdotes
+      }
+    })
+  })
 
 export default reducer
