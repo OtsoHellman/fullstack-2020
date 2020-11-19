@@ -1,4 +1,4 @@
-import { getAll, post } from '../services/anecdoteService'
+import { getAll, post, vote } from '../services/anecdoteService'
 
 
 const getId = () => (100000 * Math.random()).toFixed(0)
@@ -19,13 +19,11 @@ const sortedAnecdotes = anecdotes => {
 const reducer = (state = [], action) => {
   switch (action.type) {
     case 'VOTE':
-      const id = action.data.id
-      const anecdoteToVote = state.find(anecdote => anecdote.id === id)
       const changedAnecdote = {
-        ...anecdoteToVote,
-        votes: anecdoteToVote.votes + 1
+        ...action.data.anecdote,
+        votes: action.data.anecdote.votes + 1
       }
-      return sortedAnecdotes(state.map(anecdote => anecdote.id === id ? changedAnecdote : anecdote))
+      return sortedAnecdotes(state.map(anecdote => anecdote.id === action.data.anecdote.id ? changedAnecdote : anecdote))
     case 'CREATE':
       return sortedAnecdotes([...state, asObject(action.data.content)])
 
@@ -36,12 +34,15 @@ const reducer = (state = [], action) => {
   }
 }
 
-export const voteAnecdote = id => ({
-  type: 'VOTE',
-  data: {
-    id
-  }
-})
+export const voteAnecdote = anecdote => async dispatch => {
+  await vote(anecdote)
+  dispatch({
+    type: 'VOTE',
+    data: {
+      anecdote
+    }
+  })
+}
 
 export const createAnecdote = content => async dispatch => {
   await post(content)
