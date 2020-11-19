@@ -12,12 +12,19 @@ const reducer = (state = initialState, action) => {
 }
 
 
-export const setNotification = (content) => ({
-  type: 'SET_NOTIFICATION',
-  data: {
-    content
-  }
-})
+export const setNotification = (content, timeout) => dispatch => {
+  dispatch({
+    type: 'SET_NOTIFICATION',
+    data: {
+      content
+    }
+  })
+
+  setTimeout(() => {
+    console.log("moro")
+    dispatch(clearNotification())
+  }, 1000*timeout)
+}
 
 export const clearNotification = () => ({
   type: 'CLEAR_NOTIFICATION'
