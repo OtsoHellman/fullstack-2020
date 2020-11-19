@@ -1,4 +1,5 @@
 const initialState = null
+let notificationTimeout
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -20,7 +21,8 @@ export const setNotification = (content, timeout) => dispatch => {
     }
   })
 
-  setTimeout(() => {
+  clearTimeout(notificationTimeout)
+  notificationTimeout = setTimeout(() => {
     dispatch(clearNotification())
   }, 1000*timeout)
 }
