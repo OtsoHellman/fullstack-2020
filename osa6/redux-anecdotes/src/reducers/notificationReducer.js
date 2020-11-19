@@ -21,7 +21,6 @@ export const setNotification = (content, timeout) => dispatch => {
   })
 
   setTimeout(() => {
-    console.log("moro")
     dispatch(clearNotification())
   }, 1000*timeout)
 }
