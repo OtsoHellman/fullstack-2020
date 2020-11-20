@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+
+import { useCountry } from './hooks'
 
 const useField = (type) => {
   const [value, setValue] = useState('')
@@ -13,14 +14,6 @@ const useField = (type) => {
     value,
     onChange
   }
-}
-
-const useCountry = (name) => {
-  const [country, setCountry] = useState(null)
-
-  useEffect()
-
-  return country
 }
 
 const Country = ({ country }) => {
