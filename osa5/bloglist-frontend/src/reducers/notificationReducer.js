@@ -1,30 +1,37 @@
-const initialState = null
+const initialState = {
+  message: null,
+  isError: null
+}
 let notificationTimeout
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_NOTIFICATION':
-      return action.data.content
+      return action.data
     case 'CLEAR_NOTIFICATION':
-      return null
+      return {
+        message: null,
+        isError: null
+      }
     default:
       return state
   }
 }
 
 
-export const setNotification = (content, timeout) => dispatch => {
+export const setNotificationMessage = (message, isError, timeout) => dispatch => {
   dispatch({
     type: 'SET_NOTIFICATION',
     data: {
-      content
+      message,
+      isError
     }
   })
 
   clearTimeout(notificationTimeout)
   notificationTimeout = setTimeout(() => {
     dispatch(clearNotification())
-  }, 1000*timeout)
+  }, timeout)
 }
 
 export const clearNotification = () => ({
