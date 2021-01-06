@@ -12,8 +12,8 @@ const notificationStyle = isError => ({
 })
 
 const Notification = () => {
-  const message = useSelector(state => state.message)
-  const isError = useSelector(state => state.isError)
+  const message = useSelector(state => state.notification.message)
+  const isError = useSelector(state => state.notification.isError)
   return (message && 
     <div style={notificationStyle(isError)}>
       {message}

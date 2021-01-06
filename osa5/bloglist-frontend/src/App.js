@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import blogService from './services/blogs'
+import { useSelector, useDispatch } from 'react-redux'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import BlogView from './components/BlogView'
 import LoginForm from './components/LoginForm'
 import { setNotificationMessage } from './reducers/notificationReducer'
+import { createBlog, deleteBlog, initializeBlogs, postLike } from './reducers/blogReducer'
+import blogService from './services/blogs'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector(state => state.blogs)
   const [user, setUser] = useState(null)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
+    dispatch(initializeBlogs())
   }, [])
 
   useEffect(() => {
@@ -48,22 +47,6 @@ const App = () => {
     setUser(null)
   }
 
-  const postBlog = async (blog) => {
-    const response = await blogService.postBlog(blog)
-    dispatch(setNotificationMessage(`new blog ${response.title} by ${response.author} added`, false, 2000))
-    setBlogs(blogs.concat(response))
-  }
-
-  const removeBlog = async (blog) => {
-    const response = await blogService.removeBlog(blog)
-    response && setBlogs(blogs.filter(asd => asd.id !== blog.id))
-  }
-
-  const postLike = async (blog) => {
-    const response = await blogService.postLike(blog)
-    setBlogs(blogs.map(blog => blog.id === response.id ? response : blog))
-  }
-
   return <>
     <Notification />
     {user
@@ -71,9 +54,9 @@ const App = () => {
         blogs={blogs}
         user={user}
         handleLogout={handleLogout}
-        postBlog={postBlog}
-        postLike={postLike}
-        removeBlog={removeBlog} />
+        postBlog={async (blog) => dispatch(createBlog(blog))}
+        postLike={async (blog) => dispatch(postLike(blog))}
+        removeBlog={async (blog) => dispatch(deleteBlog(blog))} />
       : <LoginForm handleLogin={handleLogin} />}
   </>
 }
