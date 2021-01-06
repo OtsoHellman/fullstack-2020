@@ -1,4 +1,5 @@
 import React from 'react'
+import useSelector from 'react-redux'
 
 const notificationStyle = isError => ({
   color: isError ? 'red' : 'green',
@@ -10,8 +11,10 @@ const notificationStyle = isError => ({
   marginBottom: '10px',
 })
 
-const Notification = ({ message, isError }) => {
-  return (
+const Notification = () => {
+  const message = useSelector(state => state.notificationMessage)
+  const isError = useSelector(state => state.notificationIsError)
+  return (message && 
     <div style={notificationStyle(isError)}>
       {message}
     </div>

@@ -72,7 +72,7 @@ const App = () => {
   }
 
   return <>
-    {notificationMessage.message && <Notification message={notificationMessage.message} isError={notificationMessage.isError} />}
+    <Notification />
     {user
       ? <BlogView
         blogs={blogs}
