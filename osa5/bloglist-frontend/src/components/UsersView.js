@@ -1,14 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import userService from '../services/user'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
-const BlogView = () => {
-    const [users, setUsers] = useState([])
-
-    useEffect(() => {
-        userService.getAll()
-            .then(response => setUsers(response))
-    }, [])
-
+const BlogView = ({ users }) => {
     return (users.length > 0 && <>
         <h1>Users</h1>
         <table>
@@ -19,8 +12,8 @@ const BlogView = () => {
                 </tr>
             </thead>
             <tbody>
-                {users.map(user => <tr key={user.username}>
-                    <th>{user.name}</th>
+                {users.map(user => <tr key={user.id}>
+                    <th><Link to={`/users/${user.id}`}>{user.name}</Link></th>
                     <th>{user.blogs.length}</th>
                 </tr>)}
             </tbody>
