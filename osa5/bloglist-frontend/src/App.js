@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Switch, Route } from 'react-router-dom'
 import Notification from './components/Notification'
+import Header from './components/Header'
+import UsersView from './components/UsersView'
 import BlogView from './components/BlogView'
 import LoginForm from './components/LoginForm'
 import { setNotificationMessage } from './reducers/notificationReducer'
@@ -32,13 +35,23 @@ const App = () => {
   return <>
     <Notification />
     {user
-      ? <BlogView
-        blogs={blogs}
-        user={user}
-        handleLogout={handleLogout}
-        postBlog={async (blog) => dispatch(createBlog(blog))}
-        postLike={async (blog) => dispatch(postLike(blog))}
-        removeBlog={async (blog) => dispatch(deleteBlog(blog))} />
+      ?
+      <>
+        <Header user={user} handleLogout={handleLogout} />
+        <Switch>
+          <Route path="/users">
+            <UsersView />
+          </Route>
+          <Route path="/">
+            <BlogView
+              blogs={blogs}
+              user={user}
+              postBlog={async (blog) => dispatch(createBlog(blog))}
+              postLike={async (blog) => dispatch(postLike(blog))}
+              removeBlog={async (blog) => dispatch(deleteBlog(blog))} />
+          </Route>
+        </Switch>
+      </>
       : <LoginForm handleLogin={handleLogin} />}
   </>
 }

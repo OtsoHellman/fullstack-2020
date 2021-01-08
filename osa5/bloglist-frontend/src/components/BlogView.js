@@ -3,7 +3,7 @@ import BlogList from './BlogList'
 import BlogCreateForm from './BlogCreateForm'
 import Togglable from './Togglable'
 
-const BlogView = ({ blogs, handleLogout, postBlog, postLike, removeBlog, user }) => {
+const BlogView = ({ blogs, postBlog, postLike, removeBlog, user }) => {
   const blogCreateFormRef = useRef()
 
   const postBlogHideToggle = (blog) => {
@@ -12,9 +12,6 @@ const BlogView = ({ blogs, handleLogout, postBlog, postLike, removeBlog, user })
   }
 
   return <div>
-    <h2>blogs</h2>
-    {user.name}
-    <button onClick={handleLogout}>log out</button>
     <Togglable buttonLabel="add blog" ref={blogCreateFormRef}>
       <BlogCreateForm postBlog={postBlogHideToggle} />
     </Togglable>
